@@ -10,17 +10,19 @@ const BASE_URL = "http://localhost:5000"; // replace with your server URL
 
 // Get the book list available in the shop
 public_users.get('/',function (req, res) {
+    res.setHeader('X-Custom-Header', 'Value'); // Set header before sending
     return res.status(200).send( JSON.stringify(books) );
 });
 
 // Get book details based on ISBN
 public_users.get('/isbn/:isbn',function (req, res) {
-  //Write your code here
-  if ( !req.params.isbn || !books[parseInt(req.params.isbn)] ) {
-    return res.status(404).send("isbn not found")
-  }
-  return res.status(200).send( JSON.stringify( books[parseInt(req.params.isbn)] ) );
- });
+    res.setHeader('X-Custom-Header', 'Value'); // Set header before sending
+    //Write your code here
+    if ( !req.params.isbn || !books[parseInt(req.params.isbn)] ) {
+        return res.status(404).send("isbn not found")
+    }
+    return res.status(200).send( JSON.stringify( books[parseInt(req.params.isbn)] ) );
+});
   
 // Get book details based on author
 public_users.get('/author/:author',function (req, res) {
@@ -52,8 +54,6 @@ public_users.get('/author/:author',function (req, res) {
 
 // Get all books based on title
 public_users.get('/title/:title',function (req, res) {
-    res.setHeader('X-Custom-Header', 'Value'); // Set header before sending
-
     const title = req.params.title;
 
     if ( !title ) {
@@ -84,6 +84,7 @@ public_users.get('/review/:isbn',function (req, res) {
 });
 
 public_users.post("/register/", (req,res) => {
+    res.setHeader('X-Custom-Header', 'Value'); // Set header before sending
     if ( !req.body.username || !req.body.password ) {
         return res.status(422).end();
     }
@@ -96,7 +97,7 @@ public_users.post("/register/", (req,res) => {
       return res.status(200).send("ok");
 });
 
-// Task 10: Get list of books
+// 10
 async function getBooks() {
     try {
         const response = await axios.get(`${BASE_URL}/`);
@@ -106,7 +107,7 @@ async function getBooks() {
     }
 }
 
-// Task 11: Get book details by ISBN
+// 11
 async function getBookByISBN(isbn) {
     try {
         const response = await axios.get(`${BASE_URL}/isbn/${isbn}`);
@@ -116,7 +117,7 @@ async function getBookByISBN(isbn) {
     }
 }
 
-// Task 12: Get book details by Author
+// 12
 async function getBooksByAuthor(author) {
     try {
         const response = await axios.get(`${BASE_URL}/author/${author}`);
@@ -126,7 +127,7 @@ async function getBooksByAuthor(author) {
     }
 }
 
-// Task 13: Get book details by Title
+// 13
 async function getBookByTitle(title) {
     try {
         const response = await axios.get(`${BASE_URL}/title/${title}`);
@@ -136,5 +137,14 @@ async function getBookByTitle(title) {
     }
 }
 
+
+const res_books = getBooks();
+console.log(res_books)
+const res_bookbyisn = getBookByISBN(1);
+console.log(res_bookbyisn)
+const res_bookbyaurthur = getBooksByAuthor("Chinua Achebe");
+console.log(res_bookbyaurthur)
+const res_bookbyttl = getBookByTitle("Things Fall Apart");
+console.log(res_bookbyttl)
 
 module.exports.general = public_users;
