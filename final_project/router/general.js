@@ -4,7 +4,8 @@ let isValid = require("./auth_users.js").isValid;
 let users = require("./auth_users.js").users;
 const public_users = express.Router();
 
-
+const axios = require("axios");
+const BASE_URL = "http://localhost:5000"; // replace with your server URL
 
 
 // Get the book list available in the shop
@@ -95,6 +96,45 @@ public_users.post("/register/", (req,res) => {
       return res.status(200).send("ok");
 });
 
+// Task 10: Get list of books
+async function getBooks() {
+    try {
+        const response = await axios.get(`${BASE_URL}/`);
+        console.log("All books:", response.data);
+    } catch (err) {
+        console.error(err.message);
+    }
+}
+
+// Task 11: Get book details by ISBN
+async function getBookByISBN(isbn) {
+    try {
+        const response = await axios.get(`${BASE_URL}/isbn/${isbn}`);
+        console.log(`Book details for ISBN ${isbn}:`, response.data);
+    } catch (err) {
+        console.error(err.response?.data || err.message);
+    }
+}
+
+// Task 12: Get book details by Author
+async function getBooksByAuthor(author) {
+    try {
+        const response = await axios.get(`${BASE_URL}/author/${author}`);
+        console.log(`Books by ${author}:`, response.data);
+    } catch (err) {
+        console.error(err.response?.data || err.message);
+    }
+}
+
+// Task 13: Get book details by Title
+async function getBookByTitle(title) {
+    try {
+        const response = await axios.get(`${BASE_URL}/title/${title}`);
+        console.log(`Book with title "${title}":`, response.data);
+    } catch (err) {
+        console.error(err.response?.data || err.message);
+    }
+}
 
 
 module.exports.general = public_users;
